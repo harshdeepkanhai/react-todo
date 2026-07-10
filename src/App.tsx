@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 
+import "./App.css";
+
 interface Todos {
   id: string;
   text: string;
@@ -49,9 +51,13 @@ function App() {
   return (
     <>
       <section id="center">
-        {(["all", "active", "done"] as const).map(filterMode => <button key={filterMode} onClick={() => setFilter(filterMode)}>{filterMode[0].toUpperCase() + filterMode.slice(1)}</button>)}
-        {visibleTodos.map(todo => <div key={todo.id} id={todo.id}><button onClick={() => toggleTodo(todo.id)}>{todo.done ? `✅` : `⬜`}</button>{todo.text}<button onClick={() => deleteTodo(todo.id)}>🗑️</button></div>)}
-        <form onSubmit={e => {
+        <div className='filters'>
+          {(["all", "active", "done"] as const).map(filterMode => <button key={filterMode} onClick={() => setFilter(filterMode)} aria-current={filter === filterMode ? "page" : undefined}
+          >{filterMode[0].toUpperCase() + filterMode.slice(1)}</button>)}
+        </div>
+        {visibleTodos.length === 0 && `No todos yet ✨`}
+        {visibleTodos.map(todo => <div className={todo.done ? "todo done" : "todo"} key={todo.id}><button aria-pressed={todo.done} onClick={() => toggleTodo(todo.id)}>{todo.done ? `✅` : `⬜`}</button>{todo.text}<button className='todo-delete' onClick={() => deleteTodo(todo.id)}>🗑️</button></div>)}
+        <form className="add-form" onSubmit={e => {
           e.preventDefault();
           addTodo(taskName);
           setTaskName("");
