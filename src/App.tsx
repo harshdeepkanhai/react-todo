@@ -34,8 +34,11 @@ function App() {
   const toggleTodo = (id: string) =>
     setTodos(prevTodos => prevTodos.map(prevTodo => prevTodo.id === id ? { ...prevTodo, done: !prevTodo.done } : prevTodo))
 
-  const addTodo = (text: string) =>
-    setTodos(prevTodos => [...prevTodos, { id: crypto.randomUUID(), text, done: false }])
+  const addTodo = (text: string) => {
+    const cleanedText: string = text.trim()
+    if (cleanedText.length !== 0)
+      setTodos(prevTodos => [...prevTodos, { id: crypto.randomUUID(), text: cleanedText, done: false }]);
+  }
 
   const deleteTodo = (id: string) =>
     setTodos(prevTodos => prevTodos.filter(prevTodo => prevTodo.id !== id))
@@ -63,7 +66,7 @@ function App() {
           setTaskName("");
         }}>
           <input value={taskName} onChange={e => setTaskName(e.target.value)} />
-          <button type='submit'>Add</button>
+          <button type='submit' disabled={taskName.trim().length === 0}>Add</button>
         </form>
       </section >
     </>
